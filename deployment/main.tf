@@ -12,19 +12,13 @@ provider "aws" {
   region = var.aws_region
 }
 
-# Data source for latest Amazon Linux 2 AMI
+# Data source for latest Amazon Linux 2023 AMI
 data "aws_ami" "amazon_linux" {
-  most_recent = true
-  owners      = ["amazon"]
+#   most_recent = true
 
   filter {
     name   = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
+    values = ["al2023-ami-2023.8.20250818.0-kernel-6.1-x86_64"]
   }
 }
 
@@ -429,7 +423,7 @@ resource "aws_instance" "corelight_api" {
 
   root_block_device {
     volume_type = "gp3"
-    volume_size = 20
+    volume_size = 30
     encrypted   = true
   }
 

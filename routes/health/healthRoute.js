@@ -21,7 +21,7 @@ module.exports = (app) => {
     }
     res.send({ data: { status: 'ok' } });
   });
-  app.post('/aws/health', async (req, res) => {
+  app.get('/aws/health', async (req, res) => {
     res.send({ data: { status: 'ok' } });
   })
 };
