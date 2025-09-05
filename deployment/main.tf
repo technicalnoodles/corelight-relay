@@ -463,8 +463,8 @@ resource "aws_lb_target_group" "corelight_api" {
     unhealthy_threshold = 2
     timeout             = 5
     interval            = 30
-    path                = "/health"
-    matcher             = "200,500"
+    path                = "/aws/health"
+    matcher             = "200"
     port                = "traffic-port"
     protocol            = "HTTP"
   }
