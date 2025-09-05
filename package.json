@@ -9,6 +9,11 @@
   "license": "MIT",
   "description": "",
   "dependencies": {
-    "express": "^4.21.2"
+    "axios": "^1.9.0",
+    "express": "^4.21.2",
+    "https": "^1.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "jwks-rsa": "^3.2.0",
+    "nodemon": "^3.1.10"
   }
 }
