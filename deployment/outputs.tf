@@ -19,13 +19,23 @@ output "ssh_command" {
 }
 
 output "app_url_https" {
-  description = "HTTPS URL for the application"
-  value       = "https://${aws_eip.corelight_api.public_ip}"
+  description = "HTTPS URL for the application via ALB"
+  value       = "https://${aws_lb.corelight_api.dns_name}"
 }
 
-output "app_url_dev" {
-  description = "Development URL for the application (port 6000)"
-  value       = "http://${aws_eip.corelight_api.public_ip}:6000"
+output "app_url_direct" {
+  description = "Direct HTTP URL to EC2 instance"
+  value       = "http://${aws_eip.corelight_api.public_ip}"
+}
+
+output "alb_dns_name" {
+  description = "DNS name of the Application Load Balancer"
+  value       = aws_lb.corelight_api.dns_name
+}
+
+output "alb_zone_id" {
+  description = "Zone ID of the Application Load Balancer"
+  value       = aws_lb.corelight_api.zone_id
 }
 
 output "security_group_id" {

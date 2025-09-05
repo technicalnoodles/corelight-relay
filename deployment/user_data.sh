@@ -39,7 +39,7 @@ Type=simple
 User=nodeapp
 WorkingDirectory=/opt/corelight-api
 Environment=NODE_ENV=production
-Environment=PORT=443
+Environment=PORT=80
 ExecStart=/usr/bin/node index.js
 Restart=always
 RestartSec=10
@@ -140,7 +140,7 @@ cat > /opt/aws/amazon-cloudwatch-agent/etc/custom-log-config.json << 'EOF'
 }
 EOF
 
-# Allow nodeapp user to bind to port 443 (requires root privileges)
+# Allow nodeapp user to bind to port 80 (requires root privileges)
 # We'll use authbind for this
 yum install -y authbind || (
     # If authbind is not available, install from source
@@ -152,11 +152,11 @@ yum install -y authbind || (
     make install
 )
 
-# Configure authbind for port 443
+# Configure authbind for port 80
 mkdir -p /etc/authbind/byport
-touch /etc/authbind/byport/443
-chown nodeapp:nodeapp /etc/authbind/byport/443
-chmod 755 /etc/authbind/byport/443
+touch /etc/authbind/byport/80
+chown nodeapp:nodeapp /etc/authbind/byport/80
+chmod 755 /etc/authbind/byport/80
 
 # Update the systemd service to use authbind
 cat > /etc/systemd/system/corelight-api.service << 'EOF'
@@ -169,7 +169,7 @@ Type=simple
 User=nodeapp
 WorkingDirectory=/opt/corelight-api
 Environment=NODE_ENV=production
-Environment=PORT=443
+Environment=PORT=80
 ExecStart=/usr/bin/authbind --deep /usr/bin/node index.js
 Restart=always
 RestartSec=10
@@ -193,25 +193,6 @@ systemctl daemon-reload
 systemctl enable corelight-api
 systemctl start corelight-api
 
-# Create a simple health check script
-cat > /opt/corelight-api/health-check.sh << 'EOF'
-#!/bin/bash
-# Simple health check script
-curl -f -k https://localhost:443/health > /dev/null 2>&1
-if [ $? -eq 0 ]; then
-    echo "Service is healthy"
-    exit 0
-else
-    echo "Service is unhealthy"
-    exit 1
-fi
-EOF
-
-chmod +x /opt/corelight-api/health-check.sh
-chown nodeapp:nodeapp /opt/corelight-api/health-check.sh
-
-# Set up a cron job for health monitoring
-echo "*/5 * * * * nodeapp /opt/corelight-api/health-check.sh >> /var/log/corelight-health.log 2>&1" >> /etc/crontab
 
 # Create update script for easy deployments
 cat > /opt/corelight-api/update.sh << 'EOF'

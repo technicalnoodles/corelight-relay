@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 // Set port based on environment
-const port = process.env.NODE_ENV === 'production' ? 443 : 6000;
+const port = process.env.NODE_ENV === 'production' ? 80 : 6000;
 
 const app = express();
 app.use(bodyParser.json());
